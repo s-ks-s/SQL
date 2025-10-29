@@ -1,0 +1,11 @@
+/*
+For each room selected at least 1 time, find the name of the person who last rented it and used it when they checked out
+*/
+SELECT room_id,name,end_date
+FROM (
+    SELECT *,ROW_NUMBER() OVER (PARTITION BY room_id ORDER BY end_date DESC) as rn
+    FROM Reservations
+) ranked
+left join Users
+on user_id=Users.id
+WHERE rn = 1;
