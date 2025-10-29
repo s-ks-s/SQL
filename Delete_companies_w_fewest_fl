@@ -1,0 +1,12 @@
+/*
+Delete the companies that made the least number of flights.
+*/
+delete from Company
+where company.id IN (
+with RankedData AS(
+select RANK() over (order by count(trip.id) ASC) as rnk, company from Trip
+group by company
+)
+select company from RankedData
+where rnk=1
+);
